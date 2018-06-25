@@ -212,7 +212,7 @@ function bufferClone(buf) {
     return view.buffer
   }
 }
-
+// 函数会被马上运行，绑定了this为res,req。给其绑定了很多方法，属性。
 function Body() {
   this.bodyUsed = false
 
@@ -275,7 +275,7 @@ function Body() {
       }
     }
   }
-
+  // res,res的属性（方法）。调用继续返回promise，
   this.text = function() {
     var rejected = consumed(this)
     if (rejected) {
@@ -388,7 +388,7 @@ function parseHeaders(rawHeaders) {
   })
   return headers
 }
-
+// 运行该函数，给req绑定了很多有用的属性，方法。
 Body.call(Request.prototype)
 
 export function Response(bodyInit, options) {
@@ -404,7 +404,7 @@ export function Response(bodyInit, options) {
   this.url = options.url || ''
   this._initBody(bodyInit)
 }
-
+// 运行该函数，给res绑定了很多有用的属性，方法。
 Body.call(Response.prototype)
 
 Response.prototype.clone = function() {
@@ -468,6 +468,7 @@ export function fetch(input, init) {
       }
       options.url = 'responseURL' in xhr ? xhr.responseURL : options.headers.get('X-Request-URL')
       var body = 'response' in xhr ? xhr.response : xhr.responseText
+      // 下载完毕，resolve传入参数一个res实例。
       resolve(new Response(body, options))
     }
 
