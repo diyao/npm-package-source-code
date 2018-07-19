@@ -35,6 +35,7 @@ module.exports = class Application extends Emitter {
    */
 
   constructor() {
+    // ES6 要求。子类没有自己的this，必须调用super把内部this指向子类本身。
     super();
 
     this.proxy = false;
@@ -108,9 +109,11 @@ module.exports = class Application extends Emitter {
       deprecate('Support for generators will be removed in v3. ' +
                 'See the documentation for examples of how to convert old middleware ' +
                 'https://github.com/koajs/koa/blob/master/docs/migration.md');
+      // 转成可Generator调用
       fn = convert(fn);
     }
     debug('use %s', fn._name || fn.name || '-');
+    // 因为push进去的中间件都是Generator函数，保证了洋葱模型。
     this.middleware.push(fn);
     return this;
   }
@@ -127,8 +130,9 @@ module.exports = class Application extends Emitter {
     const fn = compose(this.middleware);
 
     if (!this.listenerCount('error')) this.on('error', this.onerror);
-
+    // http请求经历的第一个hander函数。createServer中调用了callback，使用其返回值。
     const handleRequest = (req, res) => {
+      // 本次请求的ctx上下文对象。
       const ctx = this.createContext(req, res);
       return this.handleRequest(ctx, fn);
     };
