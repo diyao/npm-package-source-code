@@ -1,0 +1,15 @@
+{
+  "apps": [{
+    "name": "thinkjs-app-code",
+    "script": "production.js",
+    "cwd": "D:\raojianbing\agithub\diyao\npm-package-source-code\thinkjs-app-code",
+    "exec_mode": "fork",
+    "max_memory_restart": "1G",
+    "autorestart": true,
+    "node_args": [],
+    "args": [],
+    "env": {
+      
+    }
+  }]
+}
